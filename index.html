@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Space Invaders 3D</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: black;
+			}
+
+
+			#ui {
+				position: absolute;
+				color: white;
+				font-size: 3rem;
+				background-color: rgba(255, 0, 0, 0.801);
+				display: flex;
+				flex-direction: column;
+			}
+
+			button {
+				width: fit-content;
+				display: block;
+				margin: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="ui">
+			<button id="startButton">Start</button>
+			<button id="continueButton" style="display:none;">Continue</button>
+			<button id="retryButton" style="display:none;">Retry</button>
+			<p id="lives">Lives: 3</p>
+			<p id="lv">lv: 0</p>
+		</div>
+		<script type="importmap">
+		{
+          "imports": {
+            "three": "../node_modules/three/build/three.module.js",
+            "three/addons/": "../node_modules/three/examples/jsm/"
+          }
+        }
+      	</script>
+		<script type="module" src="app.js"></script>
+	</body>
+
+</html>
