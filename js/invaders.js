@@ -28,9 +28,9 @@ export function createInvaders(scene, invaderMesh, range = 10) {
 	}
 	return invaders;
 }
-export function moveInvaders(invaders, range = 10) {
+export function moveInvaders(invaders, range = 10, lv) {
 	invaders.forEach(invader => {
-		invader.position.x += direction * 0.05;
+		invader.position.x += direction * (0.05 + (lv * .005));
 	});
 
 	if (invaders.some(invader => invader.position.x > range || invader.position.x < -range)) {

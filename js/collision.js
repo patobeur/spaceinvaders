@@ -4,7 +4,7 @@ export function detectCollisions(projectiles, invaders, shooter, scene, onCollis
 	projectiles.forEach((projectile, pIndex) => {
 		invaders.forEach((invader, iIndex) => {
 			const distance = projectile.position.distanceTo(invader.position);
-			if (distance < 0.5) { // Ajustez cette valeur selon la taille de vos objets
+			if (distance < 0.9) { // Ajustez cette valeur selon la taille de vos objets
 				// Retirer l'invader et le projectile de la scène et des tableaux
 				invader.geometry.dispose();
 				invader.material.dispose();

@@ -13,4 +13,6 @@ export function createShooter(scene, spaceship) {
 export function moveShooter(event, shooter) {
 	if (event.key === 'ArrowLeft') shooter.position.x -= 0.5;
 	if (event.key === 'ArrowRight') shooter.position.x += 0.5;
+	if (event.key === 'q') shooter.position.x -= 0.5;
+	if (event.key === 'd') shooter.position.x += 0.5;
 }

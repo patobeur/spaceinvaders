@@ -19,32 +19,36 @@
 				position: absolute;
 				color: white;
 				font-size: 3rem;
-				background-color: rgba(255, 0, 0, 0.801);
 				display: flex;
 				flex-direction: column;
+				border-radius: 9px;
 			}
 
 			button {
-				width: fit-content;
+				position: absolute;
+				top: 20%;
+				left: 50%;
+				transform: translateX(-50%);
+				font-size: 5rem;
 				display: block;
-				margin: 10px;
+				padding: 1rem;
 			}
 		</style>
 	</head>
 
 	<body>
+		<button id="startButton">Start</button>
+		<button id="continueButton" style="display:none;">Continue</button>
+		<button id="retryButton" style="display:none;">Retry</button>
 		<div id="ui">
-			<button id="startButton">Start</button>
-			<button id="continueButton" style="display:none;">Continue</button>
-			<button id="retryButton" style="display:none;">Retry</button>
 			<p id="lives">Lives: 3</p>
 			<p id="lv">lv: 0</p>
 		</div>
 		<script type="importmap">
 		{
           "imports": {
-            "three": "../node_modules/three/build/three.module.js",
-            "three/addons/": "../node_modules/three/examples/jsm/"
+            "three": "/node_modules_min/three/build/three.module.js",
+            "three/addons/": "/node_modules_min/three/examples/jsm/"
           }
         }
       	</script>

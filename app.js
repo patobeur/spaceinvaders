@@ -12,7 +12,10 @@ let scene, camera, renderer, light, lightHelper, spaceship, invader, ambientLigh
 let lives = 3;
 let lv = 0;
 let ok = false;
+let shootTimer = new Number(0);
+let shootDelay = 25
 
+const ROOT = '';
 const startButton = document.getElementById('startButton');
 const continueButton = document.getElementById('continueButton');
 const retryButton = document.getElementById('retryButton');
@@ -28,7 +31,7 @@ startButton.style.display = 'none';
 function init() {
 	scene = new THREE.Scene();
 
-	camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+	camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 	camera.userData.name = 'camera'
 
 	renderer = new THREE.WebGLRenderer({
@@ -70,7 +73,7 @@ function init() {
 	const camTargetGeometry = new THREE.SphereGeometry(.5, 32, 32);
 	const camTargetMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0 });
 	camTarget = new THREE.Mesh(camTargetGeometry, camTargetMaterial);
-	camTarget.position.set(0, 10, 2);
+	camTarget.position.set(0, 0, 2);
 	camTarget.receiveShadow = true
 	camTarget.castShadow = true
 	scene.add(camTarget);
@@ -87,25 +90,25 @@ function init() {
 
 
 
-	const floorGeometry = new THREE.BoxGeometry(15, 2, 1);
-	const floorMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.2 });
-	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-	floor.position.set(0, 0, -.5);
-	floor.name = 'floor';
-	// floor.transparent = true;
-	// floor.opacity = .1;
-	floor.receiveShadow = true;
-	floor.castShadow = true
-	floor.userData.name = 'floor'
-	scene.add(floor);
+	// const floorGeometry = new THREE.BoxGeometry(15, 2, 1);
+	// const floorMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.2 });
+	// const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	// floor.position.set(0, 0, -.5);
+	// floor.name = 'floor';
+	// // floor.transparent = true;
+	// // floor.opacity = .1;
+	// floor.receiveShadow = true;
+	// floor.castShadow = true
+	// floor.userData.name = 'floor'
+	// scene.add(floor);
 
 	controls = new OrbitControls(camera, renderer.domElement); // Initialisation des OrbitControls
 	controls.enableDamping = false;
 	controls.enablePan = false;
-	// controls.panSpeed = 0.5;
 	controls.enableRotate = false;
-	// controls.minPolarAngle = Math.PI / 4;
-	// controls.maxPolarAngle = Math.PI / 4;
+	// // controls.panSpeed = 0.5;
+	// controls.minPolarAngle = Math.PI / 2;
+	// controls.maxPolarAngle = Math.PI;
 	controls.target.set(camTarget.position.x, camTarget.position.y, camTarget.position.z)
 	controls.minDistance = 2
 
@@ -128,6 +131,12 @@ function init() {
 }
 
 
+function shoot() {
+	if (ok) {
+		shootProjectile(shooter, projectiles, scene, lv);
+	}
+}
+
 function initshooter(scene) {
 	shooter = createShooter(scene, spaceship);
 	projectiles = [];
@@ -139,8 +148,9 @@ function initinvaders(scene, invader) {
 
 function handleKeyDown(event) {
 	moveShooter(event, shooter);
-	if (event.key === ' ') {
-		shootProjectile(shooter, projectiles, scene);
+	if (event.key === ' ' && shootTimer < 1) {
+		shootTimer = 1
+		shootProjectile(shooter, projectiles, scene, lv);
 	}
 }
 
@@ -149,19 +159,20 @@ function animate() {
 		requestAnimationFrame(animate);
 		camera.lookAt(camTarget.position);
 		camera.updateProjectionMatrix();
-		moveInvaders(invaders);
+		moveInvaders(invaders, 10, lv);
 		moveProjectiles(projectiles);
 		detectCollisions(projectiles, invaders, shooter, scene, onCollision);
 		victoryCheck(invaders, onVictory);
-
 		controls.update();
 		renderer.render(scene, camera);
+		if (shootTimer > 0) shootTimer++
+		if (shootTimer > shootDelay) shootTimer = 0
 	}
 }
 
 function start() {
 	spaceship = _GLTFLoader.models['Spaceship']
-	invader = _GLTFLoader.models['Invader']
+	invader = _GLTFLoader.models['Koi']
 	// let astraunaute = clone(_GLTFLoader.models['Astronaut'])
 	// let astraunaute2 = clone(astraunaute)
 	// let astraunaute3 = clone(astraunaute2)
@@ -182,6 +193,7 @@ function startGame() {
 	initshooter(scene);
 	initinvaders(scene, invader);
 	ok = true;
+	document.body.addEventListener('click', shoot);
 	animate();
 }
 
